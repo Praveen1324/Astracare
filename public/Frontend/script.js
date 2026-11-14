@@ -97,6 +97,27 @@ function injectNavAuthControls(user, page) {
   `;
   navLinks.appendChild(controls);
 
+  if (user.username === "demo") {
+    const currentMode = sessionStorage.getItem("astrum_demo_mode") || "nominal";
+    const simBar = document.createElement("div");
+    simBar.id = "judgeSimBar";
+    simBar.style.cssText = "position:fixed;bottom:16px;right:16px;z-index:9999;background:rgba(10,16,32,0.94);border:1px solid rgba(56,189,248,0.38);backdrop-filter:blur(12px);border-radius:12px;padding:10px 14px;box-shadow:0 12px 32px rgba(0,0,0,0.55);display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--font-sans);";
+    simBar.innerHTML = `
+      <span style="font-size:0.74rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#38BDF8;margin-right:4px;">Judge Sim:</span>
+      <button type="button" data-sim-mode="worse" style="padding:5px 10px;border-radius:7px;border:1px solid ${currentMode === "worse" ? "#F43F5E" : "rgba(148,163,184,0.25)"};background:${currentMode === "worse" ? "rgba(244,63,94,0.22)" : "transparent"};color:${currentMode === "worse" ? "#FDA4AF" : "#CBD5E1"};font-size:0.76rem;font-weight:600;cursor:pointer;">Worse Health</button>
+      <button type="button" data-sim-mode="nominal" style="padding:5px 10px;border-radius:7px;border:1px solid ${currentMode === "nominal" ? "#38BDF8" : "rgba(148,163,184,0.25)"};background:${currentMode === "nominal" ? "rgba(56,189,248,0.22)" : "transparent"};color:${currentMode === "nominal" ? "#BAE6FD" : "#CBD5E1"};font-size:0.76rem;font-weight:600;cursor:pointer;">Nominal (90D)</button>
+      <button type="button" data-sim-mode="better" style="padding:5px 10px;border-radius:7px;border:1px solid ${currentMode === "better" ? "#10B981" : "rgba(148,163,184,0.25)"};background:${currentMode === "better" ? "rgba(16,185,129,0.22)" : "transparent"};color:${currentMode === "better" ? "#A7F3D0" : "#CBD5E1"};font-size:0.76rem;font-weight:600;cursor:pointer;">Better Health</button>
+    `;
+    document.body.appendChild(simBar);
+
+    simBar.querySelectorAll("[data-sim-mode]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        sessionStorage.setItem("astrum_demo_mode", btn.dataset.simMode);
+        window.location.reload();
+      });
+    });
+  }
+
   document.getElementById('navLogoutBtn').addEventListener('click', logoutUser);
 }
 
@@ -168,6 +189,91 @@ async function loadUserAssessmentState(username) {
   } catch (e) {
     console.error('Failed to hydrate user assessment history:', e);
   }
+  if (username === "demo") {
+    const simMode = sessionStorage.getItem("astrum_demo_mode") || "nominal";
+    if (simMode === "worse" || simMode === "better") {
+      const n = cachedHistory.length;
+      cachedHistory = cachedHistory.map((row, idx) => {
+        const progress = n > 1 ? idx / (n - 1) : 1; // 0.0 (Day 1) -> 1.0 (Day 90)
+        const wave = Math.sin(idx * 0.35);
+
+        let t;
+        let g;
+        if (simMode === "worse") {
+          // Progressive orbital deconditioning & compounding stress over 90 days
+          t = {
+            env: "space", age: 34, gender: "female", height: 168,
+            massKg: Number((63.0 - progress * 3.4 + wave * 0.15).toFixed(1)),
+            massMo: Number((-0.4 - progress * 2.1).toFixed(1)),
+            massTot: Number((-progress * 3.4).toFixed(1)),
+            hrRest: Math.round(68 + progress * 40 + wave * 3),
+            hrEx: Math.round(145 + progress * 21 + wave * 2),
+            sbp: Math.round(114 - progress * 28 + wave * 2),
+            dbp: Math.round(73 - progress * 19 + wave * 1.5),
+            temp: Number((37.0 + progress * 1.2 + wave * 0.08).toFixed(1)),
+            rr: Math.round(14 + progress * 7),
+            spo2: Math.round(98 - progress * 6),
+            sleepHrs: Number((7.4 - progress * 2.5 + wave * 0.2).toFixed(1)),
+            sleepQual: Math.round(84 - progress * 34 + wave * 3),
+            exMin: Math.round(130 - progress * 50),
+            exLoad: Math.round(78 + progress * 14),
+            kcal: Math.round(2350 - progress * 580 + wave * 40),
+            protein: Math.round(94 - progress * 26),
+            fluids: Math.round(2300 - progress * 860 + wave * 50),
+            radRate: Number((0.025 + progress * 1.22).toFixed(3)),
+            radCum: Number((15 + idx * 1.42).toFixed(1)),
+            vo2Max: Number((41.2 - progress * 9.2 + wave * 0.25).toFixed(1))
+          };
+          const distressCount = Math.min(24, Math.round(progress * 16));
+          const resp = Array(28).fill(0).map((_, qIdx) => (qIdx < distressCount ? 2 : 0));
+          g = scoreGhq28Responses(resp);
+        } else {
+          // Optimal countermeasure adaptation & peak mission readiness over 90 days
+          t = {
+            env: "space", age: 34, gender: "female", height: 168,
+            massKg: Number((62.4 + progress * 0.6 + wave * 0.1).toFixed(1)),
+            massMo: Number((0.0 + progress * 0.2).toFixed(1)),
+            massTot: Number((-0.6 + progress * 0.6).toFixed(1)),
+            hrRest: Math.round(67 - progress * 10 + wave * 2),
+            hrEx: Math.round(144 - progress * 7 + wave * 2),
+            sbp: Math.round(113 + progress * 5 + wave * 1.5),
+            dbp: Math.round(72 + progress * 3 + wave * 1),
+            temp: Number((36.9 - progress * 0.1 + wave * 0.05).toFixed(1)),
+            rr: Math.round(14 - progress * 1),
+            spo2: Math.min(100, Math.round(97 + progress * 2)),
+            sleepHrs: Number((7.2 + progress * 1.0 + wave * 0.15).toFixed(1)),
+            sleepQual: Math.round(82 + progress * 13 + wave * 2),
+            exMin: Math.round(125 + progress * 22),
+            exLoad: Math.round(76 + progress * 4),
+            kcal: Math.round(2300 + progress * 180 + wave * 30),
+            protein: Math.round(90 + progress * 10),
+            fluids: Math.round(2200 + progress * 380 + wave * 40),
+            radRate: Number((0.024 - progress * 0.004).toFixed(3)),
+            radCum: Number((10 + idx * 0.38).toFixed(1)),
+            vo2Max: Number((40.2 + progress * 3.8 + wave * 0.2).toFixed(1))
+          };
+          g = scoreGhq28Responses(Array(28).fill(0));
+        }
+
+        const physEval = evaluateTelemetry(t);
+        return {
+          ...row,
+          ...t,
+          telemetry: t,
+          ghq: g,
+          physicalScore: physEval.physicalScore,
+          mentalScore: g.mentalScore
+        };
+      });
+
+      if (cachedHistory.length > 0) {
+        const latest = cachedHistory[cachedHistory.length - 1];
+        cachedTelemetry = latest.telemetry;
+        cachedGhq = latest.ghq;
+      }
+    }
+  }
+
   return { telemetry: cachedTelemetry, ghq: cachedGhq, history: cachedHistory };
 }
 
