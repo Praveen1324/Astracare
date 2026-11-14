@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health Advisory &amp; Risk Warnings | AstrumCare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="advisory">
+  <!-- Deep-Space Background, Telemetry Grid & Starfield -->
+  <div class="space-bg" aria-hidden="true">
+    <div id="starfield"></div>
+    <div class="nebula nebula-cyan"></div>
+    <div class="nebula nebula-indigo"></div>
+    <svg class="orbital-arcs" viewBox="0 0 1440 900" fill="none">
+      <circle cx="1060" cy="450" r="320" stroke="rgba(56, 189, 248, 0.12)" stroke-width="1" stroke-dasharray="6 8" />
+      <circle cx="1060" cy="450" r="460" stroke="rgba(129, 140, 248, 0.10)" stroke-width="1" />
+    </svg>
+  </div>
+
+  <!-- Unified Glassmorphic Mission Navigation -->
+  <header class="top-nav">
+    <div class="top-nav-inner">
+      <a href="index.html" class="brand-logo">
+        <span class="brand-dot"></span>
+        Astrum<span class="accent">Care</span>
+      </a>
+      <nav class="nav-links" aria-label="Mission Navigation">
+        <a href="index.html" class="nav-link">Mission Hub</a>
+        <a href="assessment.html" class="nav-link">Health Assessment</a>
+        <a href="questionnaire.html" class="nav-link">GHQ-28</a>
+        <a href="results.html" class="nav-link">Health Score</a>
+        <a href="advisory.html" class="nav-link active">Advisory</a>
+        <a href="regimen.html" class="nav-link">Diet &amp; Workout</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Health Advisory & NASA Risk Warnings -->
+  <main class="assessment-page">
+    <div class="page-topbar">
+      <a href="results.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Health Score
+      </a>
+      <span id="advisoryEnvBadge" class="mission-tag compact">
+        <span class="pulse-dot"></span>
+        CREW MEDICAL ADVISORY &amp; RISK MITIGATION
+      </span>
+    </div>
+
+    <div class="assessment-card">
+      <div class="card-header">
+        <span class="modal-kicker">ASTRUMCARE CLINICAL &amp; BEHAVIORAL COUNTERMEASURES</span>
+        <h1>Crew Health Advisory, Mental Support &amp; Spaceflight Risk Warnings</h1>
+        <p class="card-subtitle">
+          Targeted physiological corrective steps, psychological support recommendations, and NASA spaceflight risk warnings triggered whenever assessment readings fall outside mission baselines.
+        </p>
+      </div>
+
+      <div id="advisoryEmptyState" class="empty-state-box" style="display: none;"></div>
+
+      <div id="advisoryContent" style="display: none;">
+        <div id="advisoryScoreStrip" class="telemetry-summary-bar"></div>
+
+        <!-- Section 1: Physical Health Action Steps -->
+        <div class="advisory-section">
+          <div class="section-heading-row">
+            <h2>1. Physical Health Action Steps</h2>
+            <span id="physicalAdvisoryBadge" class="status-pill normal">ALL PARAMETERS NORMAL</span>
+          </div>
+          <div id="physicalAdvisoryList" class="advisory-grid"></div>
+        </div>
+
+        <!-- Section 2: Mental Health & Psychological Support -->
+        <div class="advisory-section spaced">
+          <div class="section-heading-row">
+            <h2>2. Mental Health &amp; Psychological Support</h2>
+            <span id="mentalAdvisoryBadge" class="status-pill normal">NO INTERVENTION NEEDED</span>
+          </div>
+          <div id="mentalAdvisoryList" class="advisory-grid"></div>
+        </div>
+
+        <!-- Section 3: NASA Spaceflight Health Risk Warnings & Mitigation -->
+        <div class="advisory-section spaced">
+          <div class="section-heading-row">
+            <h2>3. NASA Spaceflight Health Risk Warnings &amp; Mitigation</h2>
+            <span id="nasaRiskBadge" class="status-pill normal">NO ELEVATED RISKS</span>
+          </div>
+          <div id="nasaRiskAdvisoryList" class="advisory-grid"></div>
+        </div>
+
+        <div class="form-actions space-between">
+          <a href="regimen.html" class="cta-btn secondary-gold">
+            Astronaut Diet &amp; Workout Plan
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="index.html" class="back-link">Return to Mission Hub</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

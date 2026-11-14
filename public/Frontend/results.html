@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overall Health Score | AstrumCare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="results">
+  <!-- Deep-Space Background, Telemetry Grid & Starfield -->
+  <div class="space-bg" aria-hidden="true">
+    <div id="starfield"></div>
+    <div class="nebula nebula-cyan"></div>
+    <div class="nebula nebula-indigo"></div>
+    <svg class="orbital-arcs" viewBox="0 0 1440 900" fill="none">
+      <circle cx="1060" cy="450" r="320" stroke="rgba(56, 189, 248, 0.12)" stroke-width="1" stroke-dasharray="6 8" />
+      <circle cx="1060" cy="450" r="460" stroke="rgba(129, 140, 248, 0.10)" stroke-width="1" />
+    </svg>
+  </div>
+
+  <!-- Unified Glassmorphic Mission Navigation -->
+  <header class="top-nav">
+    <div class="top-nav-inner">
+      <a href="index.html" class="brand-logo">
+        <span class="brand-dot"></span>
+        Astrum<span class="accent">Care</span>
+      </a>
+      <nav class="nav-links" aria-label="Mission Navigation">
+        <a href="index.html" class="nav-link">Mission Hub</a>
+        <a href="assessment.html" class="nav-link">Health Assessment</a>
+        <a href="questionnaire.html" class="nav-link">GHQ-28</a>
+        <a href="results.html" class="nav-link active">Health Score</a>
+        <a href="advisory.html" class="nav-link">Advisory</a>
+        <a href="regimen.html" class="nav-link">Diet &amp; Workout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="assessment-page">
+    <div class="page-topbar">
+      <div class="topbar-links">
+        <a href="questionnaire.html" class="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back to Questionnaire
+        </a>
+        <a href="assessment.html" class="back-link">New Assessment</a>
+      </div>
+      <span id="resultsEnvBadge" class="mission-tag compact">
+        <span class="pulse-dot"></span>
+        CREW HEALTH STATUS OVERVIEW
+      </span>
+    </div>
+
+    <div class="assessment-card">
+      <div class="card-header">
+        <span class="modal-kicker">ASTRUMCARE BIOMETRIC &amp; PSYCHOLOGICAL SUMMARY</span>
+        <h1>Overall Crew Health Score</h1>
+        <p class="card-subtitle">
+          Combined readiness evaluation across physiological telemetry baselines and GHQ-28 psychological screening.
+        </p>
+      </div>
+
+      <!-- Empty State Fallback if Assessment/GHQ-28 Not Yet Completed -->
+      <div id="resultsEmptyState" class="empty-state-box" style="display: none;"></div>
+
+      <!-- Results Content -->
+      <div id="resultsContent" style="display: none;">
+        <div class="stickman-stack">
+          <!-- Row 1: Physical Health Stickman Gauge -->
+          <div class="stickman-row">
+            <div class="stickman-figure-box physical-glow">
+              <svg class="stickman-svg" viewBox="0 0 160 214" aria-label="Physical Health Gauge">
+                <defs>
+                  <clipPath id="physicalClip">
+                    <path d="M80 12 C95 12 106 23 106 37 C106 46 101 53 94 57 L136 84 C143 88 145 97 140 103 C136 108 128 109 122 105 L106 96 L108 142 L112 190 C113 197 107 202 100 202 C93 202 88 197 87 190 L80 154 L73 190 C72 197 67 202 60 202 C53 202 47 197 48 190 L52 142 L54 96 L38 105 C32 109 24 108 20 103 C15 97 17 88 24 84 L66 57 C59 53 54 46 54 37 C54 23 65 12 80 12 Z" />
+                  </clipPath>
+                </defs>
+
+                <path
+                  d="M80 12 C95 12 106 23 106 37 C106 46 101 53 94 57 L136 84 C143 88 145 97 140 103 C136 108 128 109 122 105 L106 96 L108 142 L112 190 C113 197 107 202 100 202 C93 202 88 197 87 190 L80 154 L73 190 C72 197 67 202 60 202 C53 202 47 197 48 190 L52 142 L54 96 L38 105 C32 109 24 108 20 103 C15 97 17 88 24 84 L66 57 C59 53 54 46 54 37 C54 23 65 12 80 12 Z"
+                  fill="#F8FAFC"
+                />
+
+                <g clip-path="url(#physicalClip)">
+                  <rect id="physicalFillRect" x="0" y="12" width="160" height="190" fill="#DC2626" />
+                </g>
+
+                <path
+                  d="M80 12 C95 12 106 23 106 37 C106 46 101 53 94 57 L136 84 C143 88 145 97 140 103 C136 108 128 109 122 105 L106 96 L108 142 L112 190 C113 197 107 202 100 202 C93 202 88 197 87 190 L80 154 L73 190 C72 197 67 202 60 202 C53 202 47 197 48 190 L52 142 L54 96 L38 105 C32 109 24 108 20 103 C15 97 17 88 24 84 L66 57 C59 53 54 46 54 37 C54 23 65 12 80 12 Z"
+                  fill="none"
+                  stroke="#0F172A"
+                  stroke-width="3.5"
+                  stroke-linejoin="round"
+                />
+
+                <text id="physicalPercentText" x="80" y="114" text-anchor="middle" class="stickman-pct">100%</text>
+              </svg>
+            </div>
+
+            <div class="stickman-status-block">
+              <span class="stickman-category">PHYSICAL HEALTH</span>
+              <h2 id="physicalStatusHeadline" class="stickman-headline nominal">Normal</h2>
+              <p id="physicalStatusSubtext" class="stickman-subtext">All 13 physiological and environmental telemetry parameters are within nominal mission limits.</p>
+            </div>
+          </div>
+
+          <!-- Row 2: Mental Health Stickman Gauge -->
+          <div class="stickman-row">
+            <div class="stickman-figure-box mental-glow">
+              <svg class="stickman-svg" viewBox="0 0 160 214" aria-label="Mental Health Gauge">
+                <defs>
+                  <clipPath id="mentalClip">
+                    <path d="M80 12 C95 12 106 23 106 37 C106 46 101 53 94 57 L136 84 C143 88 145 97 140 103 C136 108 128 109 122 105 L106 96 L108 142 L112 190 C113 197 107 202 100 202 C93 202 88 197 87 190 L80 154 L73 190 C72 197 67 202 60 202 C53 202 47 197 48 190 L52 142 L54 96 L38 105 C32 109 24 108 20 103 C15 97 17 88 24 84 L66 57 C59 53 54 46 54 37 C54 23 65 12 80 12 Z" />
+                  </clipPath>
+                </defs>
+
+                <path
+                  d="M80 12 C95 12 106 23 106 37 C106 46 101 53 94 57 L136 84 C143 88 145 97 140 103 C136 108 128 109 122 105 L106 96 L108 142 L112 190 C113 197 107 202 100 202 C93 202 88 197 87 190 L80 154 L73 190 C72 197 67 202 60 202 C53 202 47 197 48 190 L52 142 L54 96 L38 105 C32 109 24 108 20 103 C15 97 17 88 24 84 L66 57 C59 53 54 46 54 37 C54 23 65 12 80 12 Z"
+                  fill="#F8FAFC"
+                />
+
+                <g clip-path="url(#mentalClip)">
+                  <rect id="mentalFillRect" x="0" y="12" width="160" height="190" fill="#2563EB" />
+                </g>
+
+                <path
+                  d="M80 12 C95 12 106 23 106 37 C106 46 101 53 94 57 L136 84 C143 88 145 97 140 103 C136 108 128 109 122 105 L106 96 L108 142 L112 190 C113 197 107 202 100 202 C93 202 88 197 87 190 L80 154 L73 190 C72 197 67 202 60 202 C53 202 47 197 48 190 L52 142 L54 96 L38 105 C32 109 24 108 20 103 C15 97 17 88 24 84 L66 57 C59 53 54 46 54 37 C54 23 65 12 80 12 Z"
+                  fill="none"
+                  stroke="#0F172A"
+                  stroke-width="3.5"
+                  stroke-linejoin="round"
+                />
+
+                <text id="mentalPercentText" x="80" y="114" text-anchor="middle" class="stickman-pct">100%</text>
+              </svg>
+            </div>
+
+            <div class="stickman-status-block">
+              <span class="stickman-category">MENTAL HEALTH</span>
+              <h2 id="mentalStatusHeadline" class="stickman-headline nominal">Normal</h2>
+              <p id="mentalStatusSubtext" class="stickman-subtext">GHQ-28 psychological screening indicates resilient mood, sleep, and social functioning.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Longitudinal Health Score & Biometric Telemetry Over Time -->
+        <div class="trends-panel">
+          <div class="trends-header">
+            <div>
+              <span class="modal-kicker">LONGITUDINAL MISSION ANALYTICS</span>
+              <h2>Health Score &amp; Biometrics Over Time</h2>
+              <p>Track individual physical, mental, and physiological telemetry trends across mission days, weeks, and months.</p>
+            </div>
+
+            <div class="timeframe-group" role="group" aria-label="Timeframe Filter">
+              <button type="button" class="tf-btn active" data-days="7">7 Days (1W)</button>
+              <button type="button" class="tf-btn" data-days="30">30 Days (1M)</button>
+              <button type="button" class="tf-btn" data-days="90">90 Days (3M)</button>
+              <button type="button" class="tf-btn" data-days="180">180 Days (6M)</button>
+            </div>
+          </div>
+
+          <div class="metric-tabs" role="tablist" aria-label="Telemetry Metric Selector">
+            <button type="button" class="metric-tab active" data-metric="physical">Physical Health (%)</button>
+            <button type="button" class="metric-tab" data-metric="mental">Mental Health (%)</button>
+            <button type="button" class="metric-tab" data-metric="hr">Resting Heart Rate (bpm)</button>
+            <button type="button" class="metric-tab" data-metric="sbp">Systolic BP (mmHg)</button>
+            <button type="button" class="metric-tab" data-metric="dbp">Diastolic BP (mmHg)</button>
+            <button type="button" class="metric-tab" data-metric="temp">Core Temp (°C)</button>
+            <button type="button" class="metric-tab" data-metric="spo2">Blood Oxygen SpO₂ (%)</button>
+            <button type="button" class="metric-tab" data-metric="mass">Body Mass (kg)</button>
+            <button type="button" class="metric-tab" data-metric="sleep">Sleep Duration (hrs)</button>
+            <button type="button" class="metric-tab" data-metric="vo2">Aerobic Capacity (VO₂ Max)</button>
+          </div>
+
+          <div id="trendKpiStrip" class="trend-kpis"></div>
+
+          <div class="chart-stage">
+            <div id="chartLegend" class="chart-legend"></div>
+            <div id="chartTooltip" class="chart-tooltip"></div>
+            <svg id="longitudinalSvg" class="trend-svg" viewBox="0 0 860 285" preserveAspectRatio="xMidYMid meet" aria-label="Health Trends Over Time Chart"></svg>
+          </div>
+
+          <div class="log-history-toggle-row">
+            <span class="preset-label" id="trendLogCountLabel">Showing longitudinal check-in records</span>
+            <button type="button" id="toggleLogTableBtn" class="preset-btn">Show Dated Telemetry Log Table</button>
+          </div>
+
+          <div id="telemetryHistoryTableWrap" class="table-wrapper" style="display: none;">
+            <table class="regimen-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Physical</th>
+                  <th>Mental</th>
+                  <th>Resting HR</th>
+                  <th>BP (mmHg)</th>
+                  <th>Temp / SpO₂</th>
+                  <th>Mass / Sleep</th>
+                  <th>VO₂ Max</th>
+                </tr>
+              </thead>
+              <tbody id="telemetryHistoryTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Next Step Action Bar -->
+        <div class="results-action-bar">
+          <a href="advisory.html" class="cta-btn">
+            Health Advisory &amp; Mental Support
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+
+          <a href="regimen.html" class="cta-btn secondary-gold">
+            Astronaut Diet &amp; Workout Plan
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+
+          <a href="index.html" class="back-link">Return to Mission Hub</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

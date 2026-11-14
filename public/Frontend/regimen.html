@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diet Plan &amp; Workout Routine | AstrumCare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="regimen">
+  <!-- Deep-Space Background, Telemetry Grid & Starfield -->
+  <div class="space-bg" aria-hidden="true">
+    <div id="starfield"></div>
+    <div class="nebula nebula-cyan"></div>
+    <div class="nebula nebula-indigo"></div>
+    <svg class="orbital-arcs" viewBox="0 0 1440 900" fill="none">
+      <circle cx="1060" cy="450" r="320" stroke="rgba(56, 189, 248, 0.12)" stroke-width="1" stroke-dasharray="6 8" />
+      <circle cx="1060" cy="450" r="460" stroke="rgba(129, 140, 248, 0.10)" stroke-width="1" />
+    </svg>
+  </div>
+
+  <!-- Unified Glassmorphic Mission Navigation -->
+  <header class="top-nav">
+    <div class="top-nav-inner">
+      <a href="index.html" class="brand-logo">
+        <span class="brand-dot"></span>
+        Astrum<span class="accent">Care</span>
+      </a>
+      <nav class="nav-links" aria-label="Mission Navigation">
+        <a href="index.html" class="nav-link">Mission Hub</a>
+        <a href="assessment.html" class="nav-link">Health Assessment</a>
+        <a href="questionnaire.html" class="nav-link">GHQ-28</a>
+        <a href="results.html" class="nav-link">Health Score</a>
+        <a href="advisory.html" class="nav-link">Advisory</a>
+        <a href="regimen.html" class="nav-link active">Diet &amp; Workout</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Diet Plan & Workout Routine -->
+  <main class="assessment-page">
+    <div class="page-topbar">
+      <a href="results.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Health Score
+      </a>
+      <span id="regimenEnvBadge" class="mission-tag compact">
+        <span class="pulse-dot"></span>
+        CREW NUTRITION &amp; COUNTERMEASURE EXERCISE
+      </span>
+    </div>
+
+    <div class="assessment-card">
+      <div class="card-header">
+        <span class="modal-kicker">ASTRUMCARE MISSION PERFORMANCE PROTOCOL</span>
+        <h1>Astronaut Diet Plan &amp; Daily Workout Routine</h1>
+        <p class="card-subtitle">
+          Minimum daily caloric and micronutrient requirements calculated from your age, gender, height, and body mass, dynamically adapted to your live vitals, body-mass trend, and mental readiness.
+        </p>
+      </div>
+
+      <div id="regimenEmptyState" class="empty-state-box" style="display: none;"></div>
+
+      <div id="regimenContent" style="display: none;">
+        <div id="regimenCrewBanner" class="telemetry-summary-bar"></div>
+        <div id="regimenOverrideBanner" class="regimen-override-banner"></div>
+
+        <div class="toolbar">
+          <div class="env-group" role="group" aria-label="Mission Environment">
+            <button type="button" class="regimen-env-btn active" data-env="space">Space (0g)</button>
+            <button type="button" class="regimen-env-btn" data-env="moon">Moon (0.165g)</button>
+            <button type="button" class="regimen-env-btn" data-env="mars">Mars (0.376g)</button>
+          </div>
+          <span class="preset-label" id="regimenWorkloadTag">Daily Exercise Target: 135 min/day</span>
+        </div>
+
+        <!-- Part 1: Daily Nutrition & Hydration Targets -->
+        <div class="advisory-section">
+          <div class="section-heading-row">
+            <h2>1. Daily Nutrition &amp; Hydration Targets</h2>
+            <span id="regimenMinimumsPill" class="status-pill normal">DAILY TARGETS</span>
+          </div>
+
+          <div id="nutrientSummaryGrid" class="nutrient-grid"></div>
+
+          <div class="table-wrapper">
+            <table class="regimen-table">
+              <thead>
+                <tr>
+                  <th>Nutrient</th>
+                  <th>Minimum Daily Target</th>
+                  <th>Spaceflight Physiological Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Vitamin D₃</strong></td>
+                  <td>25 mcg (1,000 IU)</td>
+                  <td>Maintains calcium absorption and bone mineralization with zero natural UV exposure.</td>
+                </tr>
+                <tr>
+                  <td><strong>Calcium</strong></td>
+                  <td>1,000 – 1,200 mg</td>
+                  <td>Counters microgravity bone demineralization (capped &lt; 1,500 mg to prevent kidney stones).</td>
+                </tr>
+                <tr>
+                  <td><strong>Potassium</strong></td>
+                  <td>3,500 – 4,700 mg</td>
+                  <td>Supports intracellular fluid balance, neuromuscular signaling, and bone retention.</td>
+                </tr>
+                <tr>
+                  <td><strong>Magnesium</strong></td>
+                  <td id="magnesiumTargetCell">400 – 420 mg</td>
+                  <td>Supports ATP energy metabolism, cardiac rhythm stability, and sleep quality.</td>
+                </tr>
+                <tr>
+                  <td><strong>Vitamin C &amp; E</strong></td>
+                  <td>90 mg Vit C / 15 mg Vit E</td>
+                  <td>Antioxidant defense against cosmic and solar ionizing radiation oxidative stress.</td>
+                </tr>
+                <tr>
+                  <td><strong>Sodium / Iron Targets</strong></td>
+                  <td id="ironTargetCell">&lt; 2,300 mg Na / 8–10 mg Fe</td>
+                  <td>Calibrated to gender/age requirements while preventing fluid hypertension and iron overload.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="sub-section-title">Recommended Daily Astronaut Meal Plan</h3>
+          <div id="mealPlanList" class="advisory-grid"></div>
+        </div>
+
+        <!-- Part 2: Daily Astronaut Workout Routine -->
+        <div class="advisory-section spaced">
+          <div class="section-heading-row">
+            <h2>2. Daily Astronaut Workout Plan &amp; Routine</h2>
+            <span id="workoutTotalBadge" class="status-pill normal">135 MIN / DAY</span>
+          </div>
+          <div id="workoutRoutineList" class="advisory-grid"></div>
+        </div>
+
+        <div class="form-actions space-between">
+          <a href="advisory.html" class="cta-btn">View Health Advisory &amp; Mental Support</a>
+          <a href="index.html" class="back-link">Return to Mission Hub</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

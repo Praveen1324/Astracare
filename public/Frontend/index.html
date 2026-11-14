@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AstrumCare | Astronaut Biometric &amp; Psychological Health</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="home">
+  <!-- Deep-Space Background, Telemetry Grid & Starfield -->
+  <div class="space-bg" aria-hidden="true">
+    <div id="starfield"></div>
+    <div class="nebula nebula-cyan"></div>
+    <div class="nebula nebula-indigo"></div>
+    <svg class="orbital-arcs" viewBox="0 0 1440 900" fill="none">
+      <circle cx="1060" cy="450" r="320" stroke="rgba(56, 189, 248, 0.12)" stroke-width="1" stroke-dasharray="6 8" />
+      <circle cx="1060" cy="450" r="460" stroke="rgba(129, 140, 248, 0.10)" stroke-width="1" />
+    </svg>
+  </div>
+
+  <!-- Unified Glassmorphic Mission Navigation (Auth controls & Crew Admin tab auto-injected by script.js) -->
+  <header class="top-nav">
+    <div class="top-nav-inner">
+      <a href="index.html" class="brand-logo">
+        <span class="brand-dot"></span>
+        Astrum<span class="accent">Care</span>
+      </a>
+      <nav class="nav-links" aria-label="Mission Navigation">
+        <a href="index.html" class="nav-link active">Mission Hub</a>
+        <a href="assessment.html" class="nav-link">Health Assessment</a>
+        <a href="questionnaire.html" class="nav-link">GHQ-28</a>
+        <a href="results.html" class="nav-link">Health Score</a>
+        <a href="advisory.html" class="nav-link">Advisory</a>
+        <a href="regimen.html" class="nav-link">Diet &amp; Workout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="hero-wrapper">
+    <div class="hero">
+      <div class="hero-content">
+        <span class="mission-tag">
+          <span class="pulse-dot"></span>
+          ORBITAL &amp; PLANETARY CREW MEDICAL TELEMETRY
+        </span>
+
+        <h1>
+          Astrum<span class="accent">Care</span>
+        </h1>
+
+        <p class="subtitle">
+          Monitor multi-parameter astronaut physiology, screen psychological readiness across orbital and planetary missions, and access gravity-calibrated nutrition and exercise countermeasures.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="assessment.html" class="cta-btn">
+            Start Health Assessment
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+
+          <a href="regimen.html" class="cta-btn secondary-gold">
+            Astronaut Diet &amp; Workout Plan
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="planet-horizon"></div>
+
+        <svg class="astronaut-svg" viewBox="0 0 360 400" fill="none" aria-label="AstrumCare EVA Crew Member">
+          <defs>
+            <linearGradient id="suitGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#F8FAFC" />
+              <stop offset="100%" stop-color="#CBD5E1" />
+            </linearGradient>
+            <linearGradient id="visorGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0EA5E9" />
+              <stop offset="55%" stop-color="#1E3A8A" />
+              <stop offset="100%" stop-color="#090D16" />
+            </linearGradient>
+          </defs>
+
+          <rect x="106" y="138" width="148" height="142" rx="26" fill="#334155" stroke="#64748B" stroke-width="2.5" />
+          <line x1="234" y1="90" x2="234" y2="142" stroke="#38BDF8" stroke-width="4" stroke-linecap="round" />
+          <circle cx="234" cy="86" r="5" fill="#38BDF8" />
+
+          <path d="M112 172 C74 186 64 224 84 252 C94 265 110 258 116 244" stroke="url(#suitGrad)" stroke-width="32" stroke-linecap="round" />
+          <path d="M248 172 C286 186 296 224 276 252 C266 265 250 258 244 244" stroke="url(#suitGrad)" stroke-width="32" stroke-linecap="round" />
+
+          <path d="M148 275 L136 356" stroke="url(#suitGrad)" stroke-width="36" stroke-linecap="round" />
+          <path d="M212 275 L224 356" stroke="url(#suitGrad)" stroke-width="36" stroke-linecap="round" />
+          <rect x="114" y="346" width="42" height="22" rx="11" fill="#1E293B" stroke="#38BDF8" stroke-width="2" />
+          <rect x="204" y="346" width="42" height="22" rx="11" fill="#1E293B" stroke="#38BDF8" stroke-width="2" />
+
+          <rect x="118" y="152" width="124" height="136" rx="34" fill="url(#suitGrad)" stroke="#94A3B8" stroke-width="2.5" />
+          <rect x="148" y="182" width="64" height="46" rx="10" fill="#0F172A" stroke="#38BDF8" stroke-width="2" />
+          <circle cx="164" cy="198" r="4" fill="#10B981" />
+          <circle cx="180" cy="198" r="4" fill="#38BDF8" />
+          <circle cx="196" cy="198" r="4" fill="#FBBF24" />
+          <path d="M158 216 L168 216 L173 208 L180 222 L186 213 L192 216 L202 216" stroke="#38BDF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+
+          <circle cx="180" cy="104" r="56" fill="url(#suitGrad)" stroke="#94A3B8" stroke-width="3" />
+          <rect x="136" y="72" width="88" height="62" rx="30" fill="url(#visorGrad)" stroke="#38BDF8" stroke-width="2.5" />
+          <path d="M150 86 C164 78 186 78 202 86" stroke="rgba(255, 255, 255, 0.45)" stroke-width="4" stroke-linecap="round" />
+        </svg>
+
+        <div class="hud-pills-wrapper">
+          <div id="hud-hr-pill" class="hud-pill pill-top-left standby">
+            <div class="hud-icon cyan">♥</div>
+            <div class="hud-data">
+              <span class="hud-label">HEART RATE</span>
+              <span id="hud-hr-val" class="hud-value">-- bpm</span>
+            </div>
+            <span class="hud-status">AWAITING</span>
+          </div>
+
+          <div id="hud-bp-pill" class="hud-pill pill-top-right standby">
+            <div class="hud-icon gold">BP</div>
+            <div class="hud-data">
+              <span class="hud-label">BLOOD PRESSURE</span>
+              <span id="hud-bp-val" class="hud-value">--/-- mmHg</span>
+            </div>
+            <span class="hud-status">AWAITING</span>
+          </div>
+
+          <div id="hud-temp-pill" class="hud-pill pill-bottom-left standby">
+            <div class="hud-icon gold">°C</div>
+            <div class="hud-data">
+              <span class="hud-label">CORE TEMP</span>
+              <span id="hud-temp-val" class="hud-value">-- °C</span>
+            </div>
+            <span class="hud-status">AWAITING</span>
+          </div>
+
+          <div id="hud-spo2-pill" class="hud-pill pill-bottom-right standby">
+            <div class="hud-icon cyan">O₂</div>
+            <div class="hud-data">
+              <span class="hud-label">BLOOD OXYGEN</span>
+              <span id="hud-spo2-val" class="hud-value">-- %</span>
+            </div>
+            <span class="hud-status">AWAITING</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pillar-grid" aria-label="System Capabilities">
+      <a href="assessment.html" class="pillar-card">
+        <span class="pillar-kicker">01 // BIOMETRICS</span>
+        <h3>13-Parameter Health Assessment</h3>
+        <p>Evaluates cardiopulmonary vitals, radiation dose, VO₂ max, and body mass across 0g, Moon, and Mars baselines.</p>
+      </a>
+      <a href="questionnaire.html" class="pillar-card">
+        <span class="pillar-kicker">02 // PSYCHOLOGY</span>
+        <h3>GHQ-28 Clinical Screening</h3>
+        <p>Screens somatic, anxiety, social dysfunction, and mood indicators tailored for isolated long-duration missions.</p>
+      </a>
+      <a href="regimen.html" class="pillar-card">
+        <span class="pillar-kicker">03 // COUNTERMEASURES</span>
+        <h3>Adaptive Diet &amp; Workout</h3>
+        <p>Generates personalized caloric targets, micronutrient goals, and daily ARED/CEVIS exercise protocols.</p>
+      </a>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
