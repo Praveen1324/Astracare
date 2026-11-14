@@ -36,6 +36,29 @@ function enforceRouteAccess(page) {
   const user = getCurrentUser();
 
   if (page === 'login') {
+    const instantDemoBtn = document.getElementById('instantDemoBtn');
+    if (instantDemoBtn) {
+      instantDemoBtn.addEventListener('click', async () => {
+        const errBox = document.getElementById('loginErrorNotice');
+        instantDemoBtn.disabled = true;
+        instantDemoBtn.textContent = 'Initializing 90-Day Mission Profile...';
+        try {
+          const user = await authenticateUser('demo', 'demo2026');
+          if (!user) {
+            errBox.textContent = 'Demo account unavailable. Contact Flight Director.';
+            errBox.style.display = 'block';
+            instantDemoBtn.disabled = false;
+            return;
+          }
+          window.location.href = 'index.html';
+        } catch (err) {
+          errBox.textContent = 'Connection Error: Unable to reach AstrumCare mission database.';
+          errBox.style.display = 'block';
+          instantDemoBtn.disabled = false;
+        }
+      });
+    }
+
     if (user) window.location.href = 'index.html';
     return null;
   }
