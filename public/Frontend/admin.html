@@ -62,7 +62,7 @@
         <span class="modal-kicker">ADMINISTRATOR CONSOLE</span>
         <h1>Crew Roster &amp; Account Provisioning</h1>
         <p class="card-subtitle">
-          Create login credentials for authorized crew members. Accounts added here persist in local browser storage until connected to your backend database.
+          Create login credentials and manage passcodes for authorized crew and flight admin accounts in the SQLite mission database.
         </p>
       </div>
 
@@ -100,6 +100,37 @@
         </div>
       </form>
 
+      <!-- Change Password Form -->
+      <div class="advisory-section spaced">
+        <div class="section-heading-row">
+          <h2>Change Account Passcode</h2>
+          <span class="status-pill normal">ADMIN &amp; CREW</span>
+        </div>
+
+        <form id="changePasswordForm" class="admin-form-grid">
+          <div class="field">
+            <label for="reset-user-select">Select Account</label>
+            <select id="reset-user-select" required></select>
+          </div>
+
+          <div class="field">
+            <label for="reset-new-password">New Passcode</label>
+            <input id="reset-new-password" type="password" placeholder="Min. 4 characters" minlength="4" required />
+          </div>
+
+          <div class="field">
+            <label for="reset-confirm-password">Confirm New Passcode</label>
+            <input id="reset-confirm-password" type="password" placeholder="Re-enter new passcode" minlength="4" required />
+          </div>
+
+          <div class="form-actions" style="margin-top: 0.25rem; padding-top: 0.75rem;">
+            <button type="submit" class="cta-btn">
+              Update Passcode
+            </button>
+          </div>
+        </form>
+      </div>
+
       <!-- Active Roster Table -->
       <div class="advisory-section spaced">
         <div class="section-heading-row">
@@ -125,6 +156,6 @@
     </div>
   </main>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=5"></script>
 </body>
 </html>

@@ -895,31 +895,45 @@ const TREND_METRIC_CONFIG = {
 };
 
 function renderLongitudinalTrends() {
-  const svg = document.getElementById('longitudinalSvg');
-  const trendCard = svg ? svg.closest('.trends-panel') : null;
+  const svg = document.getElementById("longitudinalSvg");
+  const trendCard = svg ? svg.closest(".trends-panel") : null;
   if (!svg) return;
 
   const history = cachedHistory;
   if (history.length === 0) {
-    if (trendCard) trendCard.style.display = 'none';
+    if (trendCard) trendCard.style.display = "none";
     return;
   }
-  if (trendCard) trendCard.style.display = 'block';
+  if (trendCard) trendCard.style.display = "block";
 
-  const slice = history.slice(-selectedTrendDays);
   const cfg = TREND_METRIC_CONFIG[selectedTrendMetric] || TREND_METRIC_CONFIG.physical;
 
-  document.querySelectorAll('.tf-btn').forEach(btn => {
-    btn.classList.toggle('active', Number(btn.dataset.days) === selectedTrendDays);
+  document.querySelectorAll(".tf-btn").forEach(btn => {
+    btn.classList.toggle("active", Number(btn.dataset.days) === selectedTrendDays);
   });
-  document.querySelectorAll('.metric-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.metric === selectedTrendMetric);
+  document.querySelectorAll(".metric-tab").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.metric === selectedTrendMetric);
   });
 
-  const kpiStrip = document.getElementById('trendKpiStrip');
-  if (kpiStrip && slice.length > 0) {
+  const byDate = new Map(history.map(item => [item.date, item]));
+  const latestDateStr = history[history.length - 1].date;
+  const endDate = new Date(latestDateStr + "T00:00:00");
+  const totalDays = Math.max(1, selectedTrendDays);
+
+  const timeline = [];
+  for (let i = totalDays - 1; i >= 0; i--) {
+    const d = new Date(endDate);
+    d.setDate(endDate.getDate() - i);
+    const iso = d.toISOString().split("T")[0];
+    timeline.push({ date: iso, data: byDate.get(iso) || null });
+  }
+
+  const recorded = timeline.filter(slot => slot.data !== null).map(slot => slot.data);
+
+  const kpiStrip = document.getElementById("trendKpiStrip");
+  if (kpiStrip && recorded.length > 0) {
     const primaryKey = cfg.series[0].key;
-    const vals = slice.map(d => Number(d[primaryKey]));
+    const vals = recorded.map(d => Number(d[primaryKey]));
     const latest = vals[vals.length - 1];
     const first = vals[0];
     const avg = (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1);
@@ -931,34 +945,34 @@ function renderLongitudinalTrends() {
       <div class="trend-kpi-card">
         <span class="trend-kpi-label">Latest Reading</span>
         <span class="trend-kpi-val">${latest}${cfg.unit}</span>
-        <span class="trend-kpi-sub ${delta >= 0 ? 'pos' : 'neg'}">${slice.length > 1 ? `${delta >= 0 ? '+' : ''}${delta}${cfg.unit} vs first log` : 'Initial recorded baseline'}</span>
+        <span class="trend-kpi-sub ${delta >= 0 ? "pos" : "neg"}">${recorded.length > 1 ? `${delta >= 0 ? "+" : ""}${delta}${cfg.unit} vs first log in window` : "Initial recorded baseline"}</span>
       </div>
       <div class="trend-kpi-card">
-        <span class="trend-kpi-label">${slice.length}-Log Average</span>
+        <span class="trend-kpi-label">${recorded.length}-Log Average</span>
         <span class="trend-kpi-val">${avg}${cfg.unit}</span>
         <span class="trend-kpi-sub">${cfg.series[0].label}</span>
       </div>
       <div class="trend-kpi-card">
         <span class="trend-kpi-label">Recorded Range (Min / Max)</span>
         <span class="trend-kpi-val">${minVal} – ${maxVal}${cfg.unit}</span>
-        <span class="trend-kpi-sub">${slice.length} actual check-in(s)</span>
+        <span class="trend-kpi-sub">${recorded.length} of ${totalDays} day(s) logged</span>
       </div>
       <div class="trend-kpi-card">
-        <span class="trend-kpi-label">Active Span</span>
-        <span class="trend-kpi-val">${slice.length > 1 ? `${slice[0].date.slice(5)} → ${slice[slice.length - 1].date.slice(5)}` : slice[0].date}</span>
-        <span class="trend-kpi-sub">Updates on each full check-in</span>
+        <span class="trend-kpi-label">Window Span</span>
+        <span class="trend-kpi-val">${timeline[0].date.slice(5)} → ${timeline[timeline.length - 1].date.slice(5)}</span>
+        <span class="trend-kpi-sub">${totalDays - recorded.length} day(s) with no data</span>
       </div>
     `;
   }
 
-  const legend = document.getElementById('chartLegend');
+  const legend = document.getElementById("chartLegend");
   if (legend) {
     legend.innerHTML = cfg.series.map(s => `
       <span class="legend-item">
         <span class="legend-swatch" style="background: ${s.color};"></span>
         ${s.label}
       </span>
-    `).join('');
+    `).join("");
   }
 
   const W = 860, H = 285;
@@ -966,7 +980,7 @@ function renderLongitudinalTrends() {
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
 
-  let gridHtml = '';
+  let gridHtml = "";
   const ySteps = 4;
   for (let i = 0; i <= ySteps; i++) {
     const val = cfg.min + ((cfg.max - cfg.min) * i) / ySteps;
@@ -979,101 +993,115 @@ function renderLongitudinalTrends() {
   }
 
   const getPointX = (idx) => {
-    if (slice.length === 1) return padL + plotW / 2;
-    return padL + (plotW * idx) / (slice.length - 1);
+    if (timeline.length === 1) return padL + plotW / 2;
+    return padL + (plotW * idx) / (timeline.length - 1);
   };
 
-  const xLabelCount = Math.min(6, slice.length);
+  const xLabelCount = Math.min(6, timeline.length);
   for (let i = 0; i < xLabelCount; i++) {
-    const idx = slice.length === 1 ? 0 : Math.round((i * (slice.length - 1)) / Math.max(1, xLabelCount - 1));
+    const idx = timeline.length === 1 ? 0 : Math.round((i * (timeline.length - 1)) / Math.max(1, xLabelCount - 1));
     const x = getPointX(idx);
     gridHtml += `
-      <text x="${x.toFixed(1)}" y="${H - 8}" text-anchor="middle" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="11">${slice[idx].date.slice(5)}</text>
+      <text x="${x.toFixed(1)}" y="${H - 8}" text-anchor="middle" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="11">${timeline[idx].date.slice(5)}</text>
     `;
   }
 
-  let pathsHtml = '';
+  let pathsHtml = "";
   cfg.series.forEach((s, sIdx) => {
-    const coords = slice.map((pt, idx) => {
-      const x = getPointX(idx);
-      const clamped = Math.max(cfg.min, Math.min(cfg.max, Number(pt[s.key])));
-      const y = padT + plotH - ((clamped - cfg.min) / (cfg.max - cfg.min)) * plotH;
-      return { x, y, val: pt[s.key], date: pt.date };
-    });
+    const segments = [];
+    let currentSeg = [];
 
-    if (coords.length > 1) {
-      const d = coords.map((c, idx) => `${idx === 0 ? 'M' : 'L'} ${c.x.toFixed(1)} ${c.y.toFixed(1)}`).join(' ');
-      pathsHtml += `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />`;
-
-      if (sIdx === 0) {
-        const areaD = `${d} L ${coords[coords.length - 1].x.toFixed(1)} ${(padT + plotH).toFixed(1)} L ${coords[0].x.toFixed(1)} ${(padT + plotH).toFixed(1)} Z`;
-        pathsHtml += `<path d="${areaD}" fill="${s.color}" fill-opacity="0.08" />`;
+    timeline.forEach((slot, idx) => {
+      if (slot.data && slot.data[s.key] !== undefined && slot.data[s.key] !== null) {
+        const x = getPointX(idx);
+        const clamped = Math.max(cfg.min, Math.min(cfg.max, Number(slot.data[s.key])));
+        const y = padT + plotH - ((clamped - cfg.min) / (cfg.max - cfg.min)) * plotH;
+        currentSeg.push({ x, y, val: slot.data[s.key], date: slot.date });
+      } else if (currentSeg.length > 0) {
+        segments.push(currentSeg);
+        currentSeg = [];
       }
-    }
+    });
+    if (currentSeg.length > 0) segments.push(currentSeg);
 
-    if (slice.length <= 35) {
-      coords.forEach(c => {
-        pathsHtml += `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="${coords.length === 1 ? '5' : '3.5'}" fill="${s.color}" stroke="#03060E" stroke-width="1.5" />`;
+    segments.forEach(seg => {
+      if (seg.length > 1) {
+        const d = seg.map((c, idx) => `${idx === 0 ? "M" : "L"} ${c.x.toFixed(1)} ${c.y.toFixed(1)}`).join(" ");
+        pathsHtml += `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />`;
+
+        if (sIdx === 0) {
+          const areaD = `${d} L ${seg[seg.length - 1].x.toFixed(1)} ${(padT + plotH).toFixed(1)} L ${seg[0].x.toFixed(1)} ${(padT + plotH).toFixed(1)} Z`;
+          pathsHtml += `<path d="${areaD}" fill="${s.color}" fill-opacity="0.08" />`;
+        }
+      }
+
+      seg.forEach(c => {
+        pathsHtml += `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="${recorded.length === 1 ? "5" : "3.5"}" fill="${s.color}" stroke="#03060E" stroke-width="1.5" />`;
       });
-    }
+    });
   });
 
-  const hoverRects = slice.map((pt, idx) => {
+  const hoverRects = timeline.map((slot, idx) => {
     const x = getPointX(idx);
-    const colW = plotW / Math.max(1, slice.length);
+    const colW = plotW / Math.max(1, timeline.length);
     return `<rect x="${(x - colW / 2).toFixed(1)}" y="${padT}" width="${colW.toFixed(1)}" height="${plotH}" fill="transparent" class="chart-hover-col" data-idx="${idx}" />`;
-  }).join('');
+  }).join("");
 
   svg.innerHTML = `${gridHtml}${pathsHtml}<line id="chartHoverGuide" x1="0" y1="${padT}" x2="0" y2="${padT + plotH}" stroke="rgba(255,255,255,0.35)" stroke-dasharray="4 4" visibility="hidden" />${hoverRects}`;
 
-  const tooltip = document.getElementById('chartTooltip');
-  const guide = document.getElementById('chartHoverGuide');
-  const stage = svg.closest('.chart-stage');
+  const tooltip = document.getElementById("chartTooltip");
+  const guide = document.getElementById("chartHoverGuide");
+  const stage = svg.closest(".chart-stage");
 
-  svg.querySelectorAll('.chart-hover-col').forEach(rect => {
-    rect.addEventListener('mouseenter', () => {
+  svg.querySelectorAll(".chart-hover-col").forEach(rect => {
+    rect.addEventListener("mouseenter", () => {
       const idx = Number(rect.dataset.idx);
-      const pt = slice[idx];
+      const slot = timeline[idx];
       const x = getPointX(idx);
       if (guide) {
-        guide.setAttribute('x1', x.toFixed(1));
-        guide.setAttribute('x2', x.toFixed(1));
-        guide.setAttribute('visibility', 'visible');
+        guide.setAttribute("x1", x.toFixed(1));
+        guide.setAttribute("x2", x.toFixed(1));
+        guide.setAttribute("visibility", "visible");
       }
       if (tooltip && stage) {
-        tooltip.innerHTML = `
-          <div class="chart-tooltip-date">${pt.date}</div>
-          ${cfg.series.map(s => `
-            <div class="chart-tooltip-row">
-              <span style="color:${s.color};">${s.label.split(' (')[0]}:</span>
-              <strong>${pt[s.key]}${cfg.unit}</strong>
-            </div>
-          `).join('')}
-        `;
-        tooltip.style.display = 'block';
+        if (!slot.data) {
+          tooltip.innerHTML = `
+            <div class="chart-tooltip-date">${slot.date}</div>
+            <div class="chart-tooltip-row"><span style="color:#94A3B8;">Status:</span> <strong>No Data</strong></div>
+          `;
+        } else {
+          tooltip.innerHTML = `
+            <div class="chart-tooltip-date">${slot.date}</div>
+            ${cfg.series.map(s => `
+              <div class="chart-tooltip-row">
+                <span style="color:${s.color};">${s.label.split(" (")[0]}:</span>
+                <strong>${slot.data[s.key]}${cfg.unit}</strong>
+              </div>
+            `).join("")}
+          `;
+        }
+        tooltip.style.display = "block";
         tooltip.style.left = `${(x / W) * 100}%`;
-        tooltip.style.top = '38%';
+        tooltip.style.top = "38%";
       }
     });
   });
 
   if (stage) {
-    stage.addEventListener('mouseleave', () => {
-      if (tooltip) tooltip.style.display = 'none';
-      if (guide) guide.setAttribute('visibility', 'hidden');
+    stage.addEventListener("mouseleave", () => {
+      if (tooltip) tooltip.style.display = "none";
+      if (guide) guide.setAttribute("visibility", "hidden");
     });
   }
 
-  const labelEl = document.getElementById('trendLogCountLabel');
+  const labelEl = document.getElementById("trendLogCountLabel");
   if (labelEl) {
-    labelEl.textContent = slice.length === 1
-      ? `Showing 1 actual logged record (${slice[0].date})`
-      : `Showing ${slice.length} actual logged records (${slice[0].date} to ${slice[slice.length - 1].date})`;
+    labelEl.textContent = `Showing ${recorded.length} logged record(s) across ${totalDays}-day window (${timeline[0].date} to ${timeline[timeline.length - 1].date})`;
   }
 
-  const tbody = document.getElementById('telemetryHistoryTableBody');
+  const tbody = document.getElementById("telemetryHistoryTableBody");
   if (tbody) {
-    tbody.innerHTML = [...slice].reverse().map(row => `
+    tbody.innerHTML = [...recorded].reverse().map(row => `
       <tr>
         <td style="font-family: var(--font-mono); color: var(--cyan-bright);">${row.date}</td>
         <td><strong>${row.physicalScore}%</strong></td>
@@ -1084,7 +1112,7 @@ function renderLongitudinalTrends() {
         <td>${row.massKg} kg / ${row.sleepHrs}h</td>
         <td>${row.vo2Max}</td>
       </tr>
-    `).join('');
+    `).join("");
   }
 }
 
